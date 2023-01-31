@@ -1,0 +1,95 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+<section class="h-screen">
+  <div class="px-6 h-full text-gray-800">
+    <div
+    class="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6"
+    >
+      <div class="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+        <h1 class="text-4xl font-bold text-center mt-12 mb-6">Login</h1>
+        <form class="login" method="POST" action="{% url 'account_login' %}">
+          {% csrf_token %}
+          {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+
+          <!-- Email input -->
+          <div class="mb-6">
+            <input
+              type="email"
+              class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              placeholder="Email address"
+              name="login"
+              id="id_login"
+              required
+              value="user@iinmass.com"
+            />
+          </div>
+
+          <!-- Password input -->
+          <div class="">
+            <input
+              type="password"
+              class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              placeholder="Password"
+              name="password"
+              id="id_password"
+              required
+              value="user123456"
+            />
+          </div>
+          {% if form.non_field_errors %}
+          <div class="">
+            <ul class="text-red-600">
+              {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          <div class="flex justify-between items-center mb-6 mt-6">
+            <div class="form-group form-check">
+              <input
+                type="checkbox"
+                class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                name="remember"
+                id="id_remember"
+              />
+              <label class="form-check-label inline-block text-gray-800" for="id_remember"
+                >Remember me</label
+              >
+            </div>
+            {% comment %} <a href="{% url 'account_reset_password' %}" class="text-gray-800">Forgot password?</a> {% endcomment %}
+          </div>
+
+          <div class="text-center lg:text-center">
+            <button
+              type="submit"
+              class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+            >
+              Login
+            </button>
+            <p class="text-sm font-semibold mt-2 pt-1 mb-0">
+              Don't have an account?
+              <a
+                href="{{ signup_url }}"
+                class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
+                >Register</a
+              >
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
