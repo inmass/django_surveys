@@ -1,0 +1,42 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container p-4">
+
+        <form method="post" id="create_survey_form" class="w-full max-w-lg">
+            {% csrf_token %}
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full px-3">
+                  <label for="id_survey_title" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
+                      Title of the survey
+                  </label>
+                  <input name="survey_title" id="id_survey_title" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">
+                </div>
+            </div>
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full px-3">
+                  <label for="id_survey_description" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
+                    Description of the survey
+                  </label>
+                  <textarea name="survey_description" id="id_survey_description" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" required></textarea>                </div>
+            </div>
+
+            <div id="questions" class="p-4">
+                <h4 class="text-gray-700 text-lg font-bold mb-2 questions-title hidden">Questions:</h4>
+                
+            </div>
+
+            <p id="add_question_button" class="text-blue-500 cursor-pointer">Add question</p>
+
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Create my survey
+            </button>
+        </form>
+        
+    </div>
+{% endblock content %}
+
+{% block endScripts %}
+<script src="{% static 'js/dashboard/createSurvey.js' %}"></script>
+{% endblock endScripts %}

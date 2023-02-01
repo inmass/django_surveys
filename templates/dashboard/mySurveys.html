@@ -1,0 +1,32 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+    <div class="container p-4">
+        <div class="bg-white shadow-md rounded my-6">
+          <table class="text-left w-full border-collapse">
+            <thead>
+              <tr>
+                <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Survey Name</th>
+                <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Survey Description</th>
+                <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Survey Link</th>
+                <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Survey Active</th>
+                <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Survey Created</th>
+                <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Survey Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for survey in surveys %}
+              <tr class="hover:bg-grey-lighter">
+                <td class="py-4 px-6 border-b border-grey-light">{{ survey.title }}</td>
+                <td class="py-4 px-6 border-b border-grey-light">{{ survey.description }}</td>
+                <td class="py-4 px-6 border-b border-grey-light"><a href="{{ survey.slug }}">{{ survey.slug }}</a></td>
+                <td class="py-4 px-6 border-b border-grey-light">{{ survey.is_active }}</td>
+                <td class="py-4 px-6 border-b border-grey-light">{{ survey.created_at }}</td>
+                <td class="py-4 px-6 border-b border-grey-light">{{ survey.updated_at }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+    </div>
+{% endblock content %}

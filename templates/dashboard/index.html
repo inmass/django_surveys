@@ -1,0 +1,30 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Dashboard</h1>
+                <p>Here you can see your recent activity.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Recent Posts</h2>
+                <ul>
+                    {% for post in posts %}
+                        <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h2>Recent Comments</h2>
+                <ul>
+                    {% for comment in comments %}
+                        <li><a href="{{ comment.get_absolute_url }}">{{ comment.post.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

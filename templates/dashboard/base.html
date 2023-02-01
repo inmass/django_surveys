@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - {{title}}</title>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/tailwind.js' %}"></script>
+    {% block headScripts %}{% endblock headScripts %}
+</head>
+<body>
+
+    {% include 'dashboard/partials/header.html' %}
+
+    {% comment %} container to contain sidebar and  {% endcomment %}
+    <div class="flex flex-row">
+        <div class="w-1/6">
+            {% include 'dashboard/partials/nav.html' %}
+        </div>
+        <div class="container mx-auto w-5/6 p-4">
+            <h1 class="text-2xl font-bold">{{title}}</h1>
+            {% block content %}{% endblock content %}
+        </div>
+    </div>
+
+    {% include 'dashboard/partials/footer.html' %}
+
+    {% block bodyScripts %}{% endblock bodyScripts %}
+    
+</body>
+
+{% block endScripts %}{% endblock endScripts %}
+
+</html>
