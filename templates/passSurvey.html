@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django surveys!</title>
+    <script src="{% static 'js/tailwind.js' %}"></script>
+</head>
+<body>
+    <!-- rendering the survey form -->
+    <section class="h-screen">
+        <div class="px-6 h-full text-gray-800">
+          <div
+          class="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6"
+          >
+            <div class="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+                <h1 class="text-4xl font-bold mb-4">{{survey.title}}</h1>
+                <p class="text-gray-500 mb-4">{{survey.description}}</p>
+                <form method="post" id="create_survey_form" class="w-full max-w-lg">
+                    {% csrf_token %}
+                    {% for question in survey.get_questions %}
+                        <div class="flex flex-wrap -mx-3 mb-6">
+                            <div class="w-full px-3">
+                                <label for="id_question_{{question.id}}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
+                                    {{ question.text }}
+                                </label>
+        
+                                {% if question.type == 'text' %}
+                                    <input required name="question_{{question.id}}" id="id_question_{{question.id}}" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">
+                                {% elif question.type == 'textarea' %}
+                                    <textarea required name="question_{{question.id}}" id="id_question_{{question.id}}" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" ></textarea>
+                                {% elif question.type == 'number' %}
+                                    <input required name="question_{{question.id}}" id="id_question_{{question.id}}" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="number">
+                                {% elif question.type == 'date' %}
+                                    <div class="datepicker relative form-floating mb-3 xl:w-96">
+                                        <input required type="date" name="question_{{question.id}}" id="id_question_{{question.id}}" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                    </div>
+                                {% elif question.type == 'radio' %}
+                                    <div class="flex flex-col">
+                                        {% for choice in question.get_choices %}
+                                            <label class="inline-flex items-center mt-3">
+                                                <input required type="radio" class="form-radio" name="question_{{question.id}}" value="{{choice.id}}">
+                                                <span class="ml-2">{{choice.choice_text}}</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                {% elif question.type == 'checkbox' %}
+                                    <div class="flex flex-col">
+                                        {% for choice in question.get_choices %}
+                                            <label class="inline-flex items-center mt-3">
+                                                <input type="checkbox" class="form-checkbox" name="question_{{question.id}}" value="{{choice.choice_text}}">
+                                                <span class="ml-2">{{choice.choice_text}}</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                {% elif question.type == 'select' %}
+                                    <div class="relative">
+                                        <select required name="question_{{question.id}}" id="id_question_{{question.id}}" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                            <option value="" disabled selected>Select an option</option>
+                                            {% for choice in question.get_choices %}
+                                                <option value="{{choice.id}}">{{choice.choice_text}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7 7l3-3 3 3v2H7V7zm2 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+        
+                    <div class="flex flex-wrap -mx-3 mb-6 center">
+                        <div class="w-full px-3">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+    </section>
+    
+</body>
+</html>

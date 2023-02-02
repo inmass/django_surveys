@@ -19,7 +19,7 @@
               <tr class="hover:bg-grey-lighter">
                 <td class="py-4 px-6 border-b border-grey-light">{{ survey.title }}</td>
                 <td class="py-4 px-6 border-b border-grey-light">{{ survey.description }}</td>
-                <td class="py-4 px-6 border-b border-grey-light"><a href="{{ survey.slug }}">{{ survey.slug }}</a></td>
+                <td class="py-4 px-6 border-b border-grey-light"><a href="{% url 'surveys:passSurvey' survey.slug %}">Link to survey</a></td>
                 <td class="py-4 px-6 border-b border-grey-light">{{ survey.is_active }}</td>
                 <td class="py-4 px-6 border-b border-grey-light">{{ survey.created_at }}</td>
                 <td class="py-4 px-6 border-b border-grey-light">{{ survey.updated_at }}</td>

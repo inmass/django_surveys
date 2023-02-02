@@ -29,9 +29,13 @@ class Survey(models.Model):
             self.slug = slug
         
         super().save(*args, **kwargs)
+    
+    def get_questions(self):
+        return self.question_set.all()
 
 QESTIONS_TYPES = (
     ('text', 'Text'),
+    ('textarea', 'Textarea'),
     ('number', 'Number'),
     ('date', 'Date'),
     ('radio', 'Radio'),
@@ -47,6 +51,9 @@ class Question(models.Model):
 
     def __str__(self):
         return self.text
+
+    def get_choices(self):
+        return self.choice_set.all()
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -69,9 +76,9 @@ class SurveyResponse(models.Model):
 class Response(models.Model):
     survey_response = models.ForeignKey(SurveyResponse, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    answer = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.choice.choice_text
+        return self.question.text + ' - ' + self.answer
