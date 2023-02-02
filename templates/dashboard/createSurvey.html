@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block content %}
+    
     <div class="container p-4">
+        <div id="error_container">
+            
+        </div>
 
         <form method="post" id="create_survey_form" class="w-full max-w-lg">
             {% csrf_token %}
@@ -19,11 +23,82 @@
                   <label for="id_survey_description" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                     Description of the survey
                   </label>
-                  <textarea name="survey_description" id="id_survey_description" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" required></textarea>                </div>
+                  <textarea name="survey_description" id="id_survey_description" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" ></textarea>
+                </div>
             </div>
 
-            <div id="questions" class="p-4">
+            <div id="questions" class="p-4 rounded border border-gray-200">
                 <h4 class="text-gray-700 text-lg font-bold mb-2 questions-title hidden">Questions:</h4>
+
+                <div class="question_1">
+            
+                    <div class="flex flex-wrap -mx-3 mb-2">
+        
+                        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+        
+                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="id_question_1_text">
+                            Question
+                          </label>
+                          
+                          <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" data-question-id= "1" name="question_1_text" id="id_question_1_text" type="text">
+                        
+                        </div>
+        
+                        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+        
+                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="id_question_1_type">
+                            Type of the question
+                          </label>
+        
+                          <div class="relative">
+        
+                            <select class="question-type-select block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" data-question-id= "1" name="question_1_type" id="id_question_1_type">
+                                <option value="text">Text</option>
+                                <option value="number">Number</option>
+                                <option value="date">Date</option>
+                                <option value="radio">Radio</option>
+                                <option value="checkbox">Checkbox</option>
+                                <option value="select">Select</option>
+                            </select>
+        
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+        
+                          </div>
+                          
+                        </div>
+        
+                    </div>
+        
+                    <div class="p-4 hidden" id="question_1_choices_container">
+                        <h4 class="text-gray-700 text-lg font-bold mb-2">Questions:</h4>
+                        <div id="question_1_choices" class="p-4">
+                            <div class="flex flex-wrap -mx-3 mb-2" id="question_1_choice_1">
+        
+                                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                    
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" data-question-id= "1" data-choice-id="1" name="question_1_choice_1_text" id="id_question_1_choice_1_text" type="text" placeholder="Choice 1">
+                    
+                                </div>
+                            
+                            </div>
+
+                            <div class="flex flex-wrap -mx-3 mb-2" id="question_1_choice_2">
+        
+                                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                    
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" data-question-id= "1" data-choice-id="2" name="question_1_choice_2_text" id="id_question_1_choice_2_text" type="text" placeholder="Choice 2">
+                    
+                                </div>
+                            
+                            </div>
+                        </div>
+        
+                        <p id="add_question_1_choice_button" data-question-id="1" class="add-choice-button text-blue-500 cursor-pointer">Add choice</p>
+                    </div>
+        
+                </div>
                 
             </div>
 

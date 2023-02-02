@@ -1,7 +1,8 @@
-let totalQuestions = 0;
+let totalQuestions = 1;
 $(document).ready(function() {
     var questionTemplate = `
         <div class="question_<questionNumber>">
+            <hr class="my-4">
             
             <div class="flex flex-wrap -mx-3 mb-2">
 
@@ -53,8 +54,15 @@ $(document).ready(function() {
             
                         </div>
             
-                        <p id="delete_question_<questionNumber>_choice_1_button" data-question-id="<questionNumber>" data-choice-id="1" class="delete-choice-button text-red-500 cursor-pointer">Delete choice</p>
-                    
+                    </div>
+                    <div class="flex flex-wrap -mx-3 mb-2" id="question_<questionNumber>_choice_2">
+
+                        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+            
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" data-question-id= "<questionNumber>" data-choice-id="2" name="question_<questionNumber>_choice_2_text" id="id_question_<questionNumber>_choice_2_text" type="text" placeholder="Choice 1">
+            
+                        </div>
+                                
                     </div>
                 </div>
 
@@ -109,7 +117,7 @@ $(document).on("click", ".delete-question-button", function() {
     totalQuestions--;
 
     // update the question numbers
-    for (let i = 1; i <= totalQuestions; i++) {
+    for (let i = questionId; i <= totalQuestions; i++) {
 
         $(`.question_${i + 1}`).addClass(`question_${i}`);
         $(`.question_${i + 1}`).removeClass(`question_${i + 1}`);
@@ -181,18 +189,93 @@ $("#create_survey_form").submit(function(e) {
     survey_title = $("#id_survey_title").val();
     survey_description = $("#id_survey_description").val();
     questions = [];
+
+    if (!survey_title) {
+        error_template = `
+            <div class="bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex items-center w-full" role="alert">
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>
+                </svg>
+                Please enter a title for your survey
+            </div>
+        `;
+        $("#error_container").html(error_template);
+        return;
+    }
+
+    if (!survey_description) {
+        error_template = `
+            <div class="bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex items-center w-full" role="alert">
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>
+                </svg>
+                Please enter a description for your survey
+            </div>
+        `;
+        $("#error_container").html(error_template);
+        return;
+    }
+
     for (let i = 1; i <= totalQuestions; i++) {
+        question_text = $(`#id_question_${i}_text`).val();
+        question_type = $(`#id_question_${i}_type`).val();
+
+        // if question text is empty, alert the user
+        if (!question_text) {
+            error_template = `
+                <div class="bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex items-center w-full" role="alert">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>
+                    </svg>
+                    Question ${i} is empty
+                </div>
+            `;
+            $("#error_container").html(error_template);
+            return;
+        }
+
         question = {
             "text": $(`#id_question_${i}_text`).val(),
             "type": $(`#id_question_${i}_type`).val(),
         };
-        if ($(`#question_${i}_choices`).children().length) {
-            choices = [];
-            for (let j = 1; j <= $(`#question_${i}_choices`).children().length; j++) {
-                choice = $(`#id_question_${i}_choice_${j}_text`).val();
-                choices.push(choice);
+
+        if (question_type == "radio" || question_type == "checkbox" || question_type == "select") {
+
+            if ($(`#question_${i}_choices`).children().length) {
+
+                choices = [];
+                for (let j = 1; j <= $(`#question_${i}_choices`).children().length; j++) {
+                    choice = $(`#id_question_${i}_choice_${j}_text`).val();
+                    if (choice) {
+                        choices.push(choice);
+                    } else {
+                        error_template = `
+                            <div class="bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex items-center w-full" role="alert">
+                                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>
+                                </svg>
+                                Question ${question_text} has empty choice
+                            </div>
+                        `;
+                        $("#error_container").html(error_template);
+                        return;
+                    }
+                }
+                if (choices.length) question["choices"] = choices;
+
+            } else {
+                error_template = `
+                    <div class="bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex items-center w-full" role="alert">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>
+                        </svg>
+                        Question ${question_text} has no choices
+                    </div>
+                `;
+                $("#error_container").html(error_template);
+                return;
+
             }
-            question["choices"] = choices;
         }
         questions.push(question);
     }
@@ -209,7 +292,20 @@ $("#create_survey_form").submit(function(e) {
         },
         success: function(data) {
             // redirecting the user to the dashboard
-            console.log(data);
+            if (data.status == "success") {
+                alert("Survey created successfully");
+                window.location.href = "/dashboard/mySurveys";
+            } else {
+                error_template = `
+                    <div class="bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex items-center w-full" role="alert">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>
+                        </svg>
+                        ${data.message}
+                    </div>
+                `;
+                $("#error_container").html(error_template);
+            }
         }
     });
 });

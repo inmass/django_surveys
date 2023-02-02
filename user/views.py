@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from surveys.models import *
 import json
 from django.contrib import messages
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -36,33 +37,75 @@ def createSurvey(request):
     title = 'Create Survey'
 
     if request.method == 'POST':
-        
+
+        error = False
+
         survey_title = request.POST['survey_title']
         survey_description = request.POST['survey_description']
         questions = json.loads(request.POST['questions'])
 
-        survey_obj = Survey.objects.create(
-            owner = request.user,
-            title = survey_title,
-            description = survey_description,
-        )
-
-        for question in questions:
-            print(question['text'])
-            question_obj = Question.objects.create(
-                survey = survey_obj,
-                type = question['type'],
-                text = question['text'],
+        if questions:
+            survey_obj = Survey.objects.create(
+                owner = request.user,
+                title = survey_title,
+                description = survey_description,
             )
-            
-            if (question['type'] == 'radio' or question['type'] == 'checkbox' or question['type'] == 'select') and 'choices' in question:
-                for choice in question['choices']:
-                    Choice.objects.create(
-                        question = question_obj,
-                        choice_text = choice,
+
+            for question in questions:
+                
+                # check if question type should have choices
+                if (question['type'] == 'radio' or question['type'] == 'checkbox' or question['type'] == 'select') :
+                    # check if question has choices
+                    if 'choices' in question:
+                        # check if question has at least two choices
+                        if len(question['choices']) >= 2:
+                            # create question
+                            question_obj = Question.objects.create(
+                                survey = survey_obj,
+                                type = question['type'],
+                                text = question['text'],
+                            )
+                            
+                            # create choices
+                            for choice in question['choices']:
+                                Choice.objects.create(
+                                    question = question_obj,
+                                    choice_text = choice,
+                                )
+                            
+                        else:
+                            # if question doesn't have at least two choices
+                            error = 'here1 Please add at least two choices to your question!'
+                    else:
+                        # if question doesn't have choices
+                        error = 'Please add at least two choices to your question!'
+                else:
+                    # if question type doesn't have choices create question
+                    question_obj = Question.objects.create(
+                        survey = survey_obj,
+                        type = question['type'],
+                        text = question['text'],
                     )
 
+        else:
+            # if survey doesn't have questions
+            error = 'Please add at least one question to your survey!'
+
+
+        # if there is no error
+        if error:
+            data = {
+                'status': 'error',
+                'message' : error
+            }
+        else:
+            data = {
+                'status': 'success',
+                'message' : 'Survey created successfully!'
+            }
+        # return json response
         messages.success(request, 'Survey created successfully!')
+        return JsonResponse(data)
 
     context = {
         'title': title,
