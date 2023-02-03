@@ -40,6 +40,12 @@ def passSurvey(request, slug):
                     choice.save()
 
                     answer = choice.choice_text
+                
+                elif question.type == 'checkbox':
+                    for form_choice in form_answer:
+                        choice = Choice.objects.get(choice_text = form_choice)
+                        choice.votes += 1
+                        choice.save()
 
                 response = Response(survey_response = survey_response, question = question, answer = answer)
                 response.save()
