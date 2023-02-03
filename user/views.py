@@ -28,7 +28,7 @@ def mySurveys(request):
 
     context = {
         'title': title,
-        'surveys': surveys,
+        'surveys': surveys[::-1],
     }
 
     return render(request, 'dashboard/mySurveys.html', context)
@@ -161,7 +161,7 @@ def surveyResponses(request, slug):
                     'type': 'text',
                     'answers': answers,
                 })
-    print(statistics)
+
     context = {
         'title': title,
         'survey': survey,
@@ -170,3 +170,18 @@ def surveyResponses(request, slug):
     }
 
     return render(request, 'dashboard/surveyResponses.html', context)
+
+def surveyResponse(request, slug, response_id):
+
+    survey = Survey.objects.get(slug = slug)
+    title = f'{survey.title} Response'
+
+    survey_response = SurveyResponse.objects.get(id = response_id)
+
+    context = {
+        'title': title,
+        'survey': survey,
+        'survey_response': survey_response
+    }
+
+    return render(request, 'dashboard/surveyResponse.html', context)

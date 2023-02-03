@@ -88,6 +88,9 @@ class SurveyResponse(models.Model):
     def __str__(self):
         return self.survey.title
 
+    def get_responses(self):
+        return self.response_set.all()
+
 class Response(models.Model):
     survey_response = models.ForeignKey(SurveyResponse, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

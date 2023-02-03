@@ -8,4 +8,5 @@ urlpatterns = [
     path('my-surveys/', mySurveys, name='mySurveys'),
     path('create-survey/', createSurvey, name='createSurvey'),
     path('survey-responses/<slug:slug>/', surveyResponses, name='surveyResponses'),
+    path('survey-response/<slug:slug>/<int:response_id>/', surveyResponse, name='surveyResponse'),
 ]

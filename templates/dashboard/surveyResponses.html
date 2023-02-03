@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="container p-4">
-        <h1 class="text-2xl font-bold mb-4">Your survey has been submitted {{ survey.get_responses_count }} times!</h1>
+        <h1 class="text-2xl font-bold mb-4 text-red-500">Your survey has been submitted {{ survey.get_responses_count }} times!</h1>
         {% if survey.get_responses_count %}
           <div class="bg-white shadow-md rounded my-6">
               <table class="text-left w-full border-collapse">
@@ -16,7 +16,7 @@
                     {% for survey_response in survey_responses %}
                     <tr class="hover:bg-grey-lighter">
                       <td class="py-4 px-6 border-b border-grey-light">{{ survey_response.created_at }}</td>
-                      <td class="py-4 px-6 border-b border-grey-light"><a href="#">View</a></td>
+                      <td class="py-4 px-6 border-b border-grey-light"><a href="{% url 'dashboard:surveyResponse' survey.slug survey_response.id %}" class="text-blue-500">View</a></td>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -25,7 +25,7 @@
         {% endif %}
 
         {% if statistics %}
-          <h4 class="text-2xl font-bold mb-4">Statistics</h4>
+          <h4 class="text-2xl font-bold mb-4 text-red-500">Statistics</h4>
           {% for statistic in statistics %}
             <h5 class="text-xl font-bold mb-4">{{ statistic.question }}</h5>
             <div class="bg-white shadow-md rounded my-6">
