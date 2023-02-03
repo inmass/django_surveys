@@ -33,6 +33,9 @@ class Survey(models.Model):
     def get_questions(self):
         return self.question_set.all()
 
+    def get_responses_count(self):
+        return self.surveyresponse_set.count()
+
 QESTIONS_TYPES = (
     ('text', 'Text'),
     ('textarea', 'Textarea'),
@@ -54,6 +57,18 @@ class Question(models.Model):
 
     def get_choices(self):
         return self.choice_set.all()
+    
+    def get_responses(self):
+        return self.response_set.all()
+    
+    def get_total_choices_votes(self):
+        if self.type == 'radio' or self.type == 'checkbox' or self.type == 'select':
+            total = 0
+            for choice in self.get_choices():
+                total += choice.votes
+            return total
+        else:
+            return None
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

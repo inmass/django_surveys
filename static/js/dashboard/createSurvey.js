@@ -294,7 +294,7 @@ $("#create_survey_form").submit(function(e) {
             // redirecting the user to the dashboard
             if (data.status == "success") {
                 alert("Survey created successfully");
-                window.location.href = "/dashboard/mySurveys";
+                window.location.href = "/dashboard/my-surveys";
             } else {
                 error_template = `
                     <div class="bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex items-center w-full" role="alert">

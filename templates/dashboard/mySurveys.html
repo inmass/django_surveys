@@ -12,6 +12,7 @@
                 <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Survey Active</th>
                 <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Survey Created</th>
                 <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Survey Updated</th>
+                <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Responses</th>
               </tr>
             </thead>
             <tbody>
@@ -23,6 +24,7 @@
                 <td class="py-4 px-6 border-b border-grey-light">{{ survey.is_active }}</td>
                 <td class="py-4 px-6 border-b border-grey-light">{{ survey.created_at }}</td>
                 <td class="py-4 px-6 border-b border-grey-light">{{ survey.updated_at }}</td>
+                <td class="py-4 px-6 border-b border-grey-light"><a href="{% url 'dashboard:surveyResponses' survey.slug %}">Responses</a></td>
               </tr>
               {% endfor %}
             </tbody>

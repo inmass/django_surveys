@@ -1,0 +1,121 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+    <div class="container p-4">
+        <h1 class="text-2xl font-bold mb-4">Your survey has been submitted {{ survey.get_responses_count }} times!</h1>
+        {% if survey.get_responses_count %}
+          <div class="bg-white shadow-md rounded my-6">
+              <table class="text-left w-full border-collapse">
+                  <thead>
+                    <tr>
+                      <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Submition Date</th>
+                      <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Answers</th> 
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for survey_response in survey_responses %}
+                    <tr class="hover:bg-grey-lighter">
+                      <td class="py-4 px-6 border-b border-grey-light">{{ survey_response.created_at }}</td>
+                      <td class="py-4 px-6 border-b border-grey-light"><a href="#">View</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+        {% endif %}
+
+        {% if statistics %}
+          <h4 class="text-2xl font-bold mb-4">Statistics</h4>
+          {% for statistic in statistics %}
+            <h5 class="text-xl font-bold mb-4">{{ statistic.question }}</h5>
+            <div class="bg-white shadow-md rounded my-6">
+              {% if statistic.type == 'choices' %}
+                <div class="chart-js-container hidden">
+                  {% for answer in statistic.answers %}
+                    <div class="chart-js hidden">{{ answer }}</div>
+                  {% endfor %}
+                </div>
+                <canvas id="chart-{{statistic.question}}" class="w-1/12 p-6 chart_container"></canvas>
+              {% else %}
+                {% for answer in statistic.answers %}
+                  <div class="py-4 px-6 border-b border-grey-light">{{ answer }}</div>
+                {% endfor %}
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+
+    </div>
+{% endblock content %}
+
+{% block endScripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script>
+
+  let chart_containers = document.getElementsByClassName("chart_container");
+
+  // For every chart container
+  for (var i = 0; i < chart_containers.length; i++) {
+    // Get the context of the canvas element we want to select
+    // var dictionnary = document.getElementsByClassName("chart-js");
+    var dictionnary = chart_containers[i].previousElementSibling.getElementsByClassName("chart-js");
+    let data = [];
+    let labels = [];
+
+    // For every chart-js div
+    for (var j = 0; j < dictionnary.length; j++) {
+      // Get the data from the div
+      var div_data = JSON.parse(dictionnary[j].innerHTML.split("'").join('"'));
+      // append values to data array
+      data.push(div_data.votes);
+      // append labels to labels array
+      labels.push(div_data.choice);
+    }
+    
+    var chart_div = chart_containers[i].getContext('2d');
+    // create a bar chart
+    var myChart = new Chart(chart_div, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Number of Votes',
+          data: data,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero:true,
+              stepSize: 1
+            }
+          }]
+        }
+      }
+    });
+  }
+
+
+
+
+</script>
+{% endblock endScripts %}

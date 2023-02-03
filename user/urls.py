@@ -5,6 +5,7 @@ app_name = 'dashboard'
 
 urlpatterns = [
     path('', index, name='index'),
-    path('mySurveys/', mySurveys, name='mySurveys'),
-    path('createSurvey/', createSurvey, name='createSurvey'),
+    path('my-surveys/', mySurveys, name='mySurveys'),
+    path('create-survey/', createSurvey, name='createSurvey'),
+    path('survey-responses/<slug:slug>/', surveyResponses, name='surveyResponses'),
 ]

@@ -4,6 +4,7 @@ from surveys.models import *
 import json
 from django.contrib import messages
 from django.http import JsonResponse
+import datetime
 
 # Create your views here.
 
@@ -75,7 +76,7 @@ def createSurvey(request):
                             
                         else:
                             # if question doesn't have at least two choices
-                            error = 'here1 Please add at least two choices to your question!'
+                            error = 'Please add at least two choices to your question!'
                     else:
                         # if question doesn't have choices
                         error = 'Please add at least two choices to your question!'
@@ -112,3 +113,60 @@ def createSurvey(request):
     }
 
     return render(request, 'dashboard/createSurvey.html', context)
+
+def surveyResponses(request, slug):
+
+    survey = Survey.objects.get(slug = slug)
+    title = f'{survey.title} Responses'
+
+    survey_responses = SurveyResponse.objects.filter(survey = survey)
+    statistics = []
+
+    if survey_responses:
+        for question in survey.get_questions():
+            if question.type == 'radio' or question.type == 'checkbox' or question.type == 'select':
+                choices = Choice.objects.filter(question = question)
+
+                answers = []
+                for choice in choices:
+                    answers.append({
+                        "choice": choice.choice_text,
+                        "votes": choice.votes,
+                        "total_votes": question.get_total_choices_votes()
+                    })
+                
+                statistics.append({
+                    'question': question.text,
+                    'type': 'choices',
+                    'answers': answers,
+                })
+            elif question.type == 'date':
+                answers = []
+                for response in question.get_responses():
+                    date = datetime.datetime.strptime(response.answer, '%Y-%m-%d').strftime('%d %B %Y')
+                    answers.append(date)
+
+                statistics.append({
+                    'question': question.text,
+                    'type': 'date',
+                    'answers': answers,
+                })
+            else:
+                answers = []
+                for response in question.get_responses():
+                    answers.append(response.answer)
+
+                statistics.append({
+                    'question': question.text,
+                    'type': 'text',
+                    'answers': answers,
+                })
+    print(statistics)
+    context = {
+        'title': title,
+        'survey': survey,
+        'survey_responses': survey_responses,
+        'statistics': statistics,
+    }
+
+    return render(request, 'dashboard/surveyResponses.html', context)
