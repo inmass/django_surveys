@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import dotenv
+
+# Load environment variables from .env file
+dotenv.read_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,9 +28,39 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9xa6%cd8nq)4f7b=jb5b)5omc7_1lv%(wt(f2pmz^zpk)tou=*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+PRODUCTION = os.getenv('PRODUCTION', False)
+if PRODUCTION == 'true':
+    DEBUG = False
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'django_surveys',
+            'USER': 'admin',
+            'PASSWORD': '4yHTsI2SVaun3lYI',
+            'HOST': 'db',
+            'PORT': 5432,
+        }
+    }
 
-ALLOWED_HOSTS = []
+    STATIC_URL = 'http://193.122.49.22:85/static/'
+    MEDIA_URL = 'http://193.122.49.22:85/media/'
+    # STATIC_URL = 'http://localhost:85/static/'
+    # MEDIA_URL = 'http://localhost:85/media/'
+    
+else:
+    DEBUG = True
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
+    STATIC_URL = '/static/'
+    MEDIA_URL = '/media/'
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -82,17 +116,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -127,10 +150,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
