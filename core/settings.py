@@ -42,8 +42,8 @@ if PRODUCTION == 'true':
         }
     }
 
-    STATIC_URL = 'http://193.122.49.22:85/static/'
-    MEDIA_URL = 'http://193.122.49.22:85/media/'
+    STATIC_URL = 'http://141.144.227.138:85/static/'
+    MEDIA_URL = 'http://141.144.227.138:85/media/'
     # STATIC_URL = 'http://localhost:85/static/'
     # MEDIA_URL = 'http://localhost:85/media/'
     
