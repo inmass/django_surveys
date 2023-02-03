@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from surveys.models import *
 import json
@@ -12,13 +12,8 @@ login_required = login_required(login_url='/dashboard/login/')
 
 @login_required
 def index(request):
-    title = 'Dashboard'
 
-    context = {
-        'title': title,
-    }
-
-    return render(request, 'dashboard/index.html', context)
+    return redirect('dashboard:mySurveys')
 
 @login_required
 def mySurveys(request):
